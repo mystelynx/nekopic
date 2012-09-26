@@ -29,6 +29,25 @@ class Hello extends cycle.Plan with cycle.ThreadPool with ServerErrorResponse {
         <html>
           <body>
             <p>code: {code}</p>
+            <form method="post" action="http://api.instagram.com/oauth/access_token">
+              <input type="text" name="client_id" value={CLIENT_ID}></input>
+              <input type="text" name="client_secret" value={CLIENT_SECRET}></input>
+              <input type="text" name="grant_type" value="authorization_code"></input>
+              <input type="text" name="redirect_uri" value={REDIRECT_URI}></input>
+              <input type="text" name="code" value={code}></input>
+              <input type="submit"></input>
+            </form>
+          </body>
+        </html>
+      }
+    }
+    case GET(Path("/redirect")) & Params(params) => {
+      Unauthorized ~> Html5 {
+        <html>
+          <body>
+            <p>error:{params("error")}</p>
+            <p>error_reason:{params("error_reason")}</p>
+            <p>error_description:{params("error_description")}</p>
           </body>
         </html>
       }
