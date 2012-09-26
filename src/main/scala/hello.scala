@@ -29,7 +29,7 @@ class Hello extends cycle.Plan with cycle.ThreadPool with ServerErrorResponse {
         <html>
           <body>
             <p>code: {code}</p>
-            <form method="post" action="http://api.instagram.com/oauth/access_token">
+            <form method="post" action="https://api.instagram.com/oauth/access_token">
               <input type="text" name="client_id" value={CLIENT_ID}></input>
               <input type="text" name="client_secret" value={CLIENT_SECRET}></input>
               <input type="text" name="grant_type" value="authorization_code"></input>
