@@ -12,7 +12,6 @@ scalaVersion := "2.9.2"
 
 libraryDependencies ++= Seq(
   "net.databinder" %% "unfiltered-filter" % "0.6.4",
-  "net.databinder" %% "unfiltered-jetty" % "0.6.4",
   "net.databinder" %% "unfiltered-netty" % "0.6.4",
   "net.databinder" %% "unfiltered-netty-server" % "0.6.4",
   "net.databinder" %% "unfiltered-oauth" % "0.6.4",
