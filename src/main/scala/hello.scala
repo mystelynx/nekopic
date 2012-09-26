@@ -1,5 +1,3 @@
-package com.example
-
 import unfiltered.request._
 import unfiltered.response._
 
@@ -18,8 +16,10 @@ class Hello extends cycle.Plan with cycle.ThreadPool with ServerErrorResponse {
   }
 }
 
-object Server extends App {
-  unfiltered.netty.Http(Properties.envOrElse("PORT", "8080").toInt).plan(new Hello).run()
+object Web extends App {
+  val port = Properties.envOrElse("PORT", "8080").toInt
+  println("Starting on port:%d" format port)
+  unfiltered.netty.Http(port).plan(new Hello).run()
 //  unfiltered.jetty.Http.anylocal.plan(new Hello).run { s =>
 //    unfiltered.util.Browser.open( "http://127.0.0.1:%d/hello".format(s.port))
 //  }

@@ -1,1 +1,1 @@
-web: target/start com.example.Server
+web: target/start Web
