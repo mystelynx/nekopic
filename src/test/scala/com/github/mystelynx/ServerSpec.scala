@@ -29,9 +29,9 @@ trait ServerSpec extends unfiltered.spec.Hosted {
   }
 
   "authenticate to Instagram" should {
-    "'code' from Instagram" in {
-      val resp = Http(host / "redirect" << Map("code"->"hogehoge") as_str)
-      resp must include("access_token")
+    "get authorization code" in {
+      val resp = Http(host / "oauth" / "connect" as_str)
+      println(resp)
     }
   }
 }
