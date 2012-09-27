@@ -26,14 +26,13 @@ class Nekopic extends Plan with ThreadPool with ServerErrorResponse {
       val resp = Instagram.getAccessToken(code)(CALLBACK_URL)
       SetCookies(Cookie("instagram_access_token", resp.access_token)) ~> Redirect("/feed")
     }
-    case req @ GET(Path("/feed")) & Cookies(cs) if (cs("instagram_access_token") isDefined) => {
+    case req @ GET(Path("/feed")) & Cookies(cs) => {
       val token = cs("instagram_access_token").map(_.value).getOrElse("???")
       val client = new Instagram.Client(token)
       val resp = client.users_self_feed
 
       ResponseString(resp.toString)
     }
-    case GET(Path("/feed")) => Redirect("/")
   }
 }
 
