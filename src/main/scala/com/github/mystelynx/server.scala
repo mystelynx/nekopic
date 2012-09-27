@@ -29,16 +29,11 @@ class Nekopic extends Plan with ThreadPool with ServerErrorResponse {
       val resp = Instagram.getAccessToken(code)(CALLBACK_URL)
       val sid = cs("sid").map(_.value).getOrElse("unknown session id")
       SimpleSessionStore.setSessionAttribute(sid, "ins", resp.access_token)
-      SetCookies(Cookie("ins", resp.access_token)) ~> Redirect("/feed")
+      Redirect("/feed")
     }
     case req @ GET(Path("/feed")) & Cookies(cs) => {
       val sid = cs("sid").map(_.value).getOrElse("unknown session id")
-      println("op ins")
-      println(SimpleSessionStore.getSession(sid).get.mkString)
-      println("ins")
-      println(SimpleSessionStore.getSession(sid).get.get("ins"))
-      println("last")
-      val token = SimpleSessionStore.getSessionAttribute(sid, "ins").mkString
+      val token = SimpleSessionStore.getSessionAttribute(sid, "ins").map(_.toString).getOrElse("unknown_access_token")
       ResponseString(token)
 //      val client = new Instagram.Client(token)
 //      val resp = client.users_self_feed
@@ -74,11 +69,11 @@ object SimpleSessionStore {
     case _ => throw new IllegalStateException("session store not created")
   }
   def getSessionAttribute(id: String, key: String) = store get id match {
-    case Some(map) => map get id
+    case Some(map) => map get key
     case _ => throw new IllegalStateException("session store not created")
   }
   def removeSessionAttribute(id: String, key: String) = store get id match {
-    case Some(map) => map remove id
+    case Some(map) => map remove key
     case _ => throw new IllegalStateException("session store not created")
   }
 
