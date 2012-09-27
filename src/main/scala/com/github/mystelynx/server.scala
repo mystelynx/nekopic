@@ -5,10 +5,7 @@ import unfiltered.netty.cycle._
 import unfiltered.netty.ServerErrorResponse
 import org.clapper.avsl.Logger
 import unfiltered.response._
-import unfiltered.scalate.Scalate
-import javax.ws.rs
 import unfiltered.response.Redirect
-import dispatch.{Request, url}
 import unfiltered.Cookie
 
 /**
