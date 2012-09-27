@@ -19,26 +19,28 @@ class Nekopic extends Plan with ThreadPool with ServerErrorResponse {
   val CALLBACK_URL = "http://nekopic.herokuapp.com/oauth/callback"
   val log = Logger(classOf[Nekopic])
 
+  import SessionStore._
+
   def intent = {
     case req @ GET(Path("/")) => {
-      val sid = SimpleSessionStore.createSession
+      val sid = createSession
       Ok ~> SetCookies(Cookie("sid", sid)) ~>Html { <a href="/oauth/connect">Connect with Instagram</a>}
     }
     case GET(Path("/oauth/connect")) => Redirect(Instagram.authorizeUrl(CALLBACK_URL))
     case req @ GET(Path("/oauth/callback")) & Params(InstagramAuthSuccess(code)) & Cookies(cs) => {
       val resp = Instagram.getAccessToken(code)(CALLBACK_URL)
       val sid = cs("sid").map(_.value).getOrElse("unknown session id")
-      SimpleSessionStore.setSessionAttribute(sid, "ins", resp.access_token)
+      withSession(sid) { _ save "ins"->resp.access_token }
       Redirect("/feed")
     }
     case req @ GET(Path("/feed")) & Cookies(cs) => {
       val sid = cs("sid").map(_.value).getOrElse("unknown session id")
-      val token = SimpleSessionStore.getSessionAttribute(sid, "ins").map(_.toString).getOrElse("unknown_access_token")
+      val token = withSession(sid) { _ getString "ins" }
       ResponseString(token)
-//      val client = new Instagram.Client(token)
-//      val resp = client.users_self_feed
-//
-//      ResponseString(resp.toString)
+      val client = new Instagram.Client(token)
+      val resp = client.users_self_feed
+
+      ResponseString(resp.toString)
     }
   }
 }
@@ -49,6 +51,35 @@ object InstagramAuthToken {
   val REDIRECT_URI = "http://nekopic.herokuapp.com/redirect"
 }
 object InstagramAuthSuccess extends Params.Extract("code", Params.first ~> Params.nonempty ~> Params.trimmed)
+
+object SessionStore {
+  protected def generate = scala.util.Random.alphanumeric.take(256).mkString
+  import scala.collection._
+  private val store = mutable.Map[String, Session]()
+
+  def createSession = {
+    val id = generate
+    val emptySession = new Session
+    store += id->emptySession
+    id
+  }
+
+  def withSession[T](id: String)(block: Session => T): T = {
+    val s = store get id getOrElse {
+      throw new IllegalStateException("session is not created")
+    }
+    block(s)
+  }
+
+  class Session {
+    private val storage = mutable.Map[String, Any]()
+
+    def save(kv: Pair[String, Any]) = storage += kv
+    def remove(k: String) = storage -= k
+    def get(k: String) = storage get k
+    def getString(k: String) = get(k) map(_.toString) getOrElse { throw new IllegalStateException("invalid data") }
+  }
+}
 
 object SimpleSessionStore {
   import scala.collection._
