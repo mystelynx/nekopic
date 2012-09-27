@@ -23,7 +23,7 @@ class Nekopic extends Plan with ThreadPool with ServerErrorResponse {
   val log = Logger(classOf[Nekopic])
 
   def intent = {
-    case req @ GET(Path("/")) => Ok ~> Scalate(req, "index.jade")
+    case req @ GET(Path("/")) => Ok ~> Html { <a href="/oauth/connect">Connect with Instagram</a>}
     case GET(Path("/oauth/connect")) => Redirect(Instagram.authorizeUrl(CALLBACK_URL))
     case req @ GET(Path("/oauth/callback")) & Params(InstagramAuthSuccess(code)) => {
       val resp = Instagram.getAccessToken(code)(CALLBACK_URL)
