@@ -1,0 +1,12 @@
+-@ val clientId: String
+-@ val redirectURI: String
+!!! 5
+html
+  head
+    title unfiltered-scalate
+    :css
+      .hello { font-color: #f66; }
+  body
+    #container
+      .login
+        a#login(href="/oauth/connect") Connect with Instagram
