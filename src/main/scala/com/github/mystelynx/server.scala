@@ -29,7 +29,7 @@ class Nekopic extends Plan with ThreadPool with ServerErrorResponse {
       val resp = Instagram.getAccessToken(code)(CALLBACK_URL)
       val sid = cs("sid").map(_.value).getOrElse("unknown session id")
       SimpleSessionStore.setSessionAttribute(sid, "ins", resp.access_token)
-      Redirect("/feed")
+      SetCookies(Cookie("ins", resp.access_token)) ~> Redirect("/feed")
     }
     case req @ GET(Path("/feed")) & Cookies(cs) => {
       val sid = cs("sid").map(_.value).getOrElse("unknown session id")
