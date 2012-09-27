@@ -25,6 +25,7 @@ trait ServerSpec extends unfiltered.spec.Hosted {
     "include a link to auth page" in {
       val resp = Http(host as_str)
       resp must include("Connect with Instagram")
+
     }
   }
 
