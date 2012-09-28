@@ -32,7 +32,7 @@ trait ServerSpec extends unfiltered.spec.Hosted {
   "authenticate to Instagram" should {
     "get authorization code" in {
       val resp = Http(host / "oauth" / "connect" as_str)
-      println(resp)
+
     }
   }
 }
