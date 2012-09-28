@@ -24,7 +24,7 @@ class Nekopic extends Plan with ThreadPool with ServerErrorResponse {
   def intent = {
     case req @ GET(Path("/")) => {
       val sid = createSession
-      Ok ~> SetCookies(Cookie("sid", sid)) ~>Html { <a href="/oauth/connect">Connect with Instagram</a>}
+      Ok ~> SetCookies(Cookie("sid", sid)) ~>Html5 { Nekopic.scalate.layoutAsNodes("/templates/index.jade") }
     }
     case GET(Path("/oauth/connect")) => Redirect(Instagram.authorizeUrl(CALLBACK_URL))
     case req @ GET(Path("/oauth/callback")) & Params(InstagramAuthSuccess(code)) & Cookies(cs) => {
@@ -42,6 +42,11 @@ class Nekopic extends Plan with ThreadPool with ServerErrorResponse {
       ResponseString(resp.toString)
     }
   }
+}
+
+object Nekopic {
+  import org.fusesource.scalate._
+  val scalate = new TemplateEngine
 }
 
 object InstagramAuthToken {
