@@ -7,6 +7,7 @@ import org.clapper.avsl.Logger
 import unfiltered.response._
 import unfiltered.response.Redirect
 import unfiltered.Cookie
+import sun.misc.OSEnvironment
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +25,7 @@ class Nekopic extends Plan with ThreadPool with ServerErrorResponse {
   def intent = {
     case req @ GET(Path("/")) => {
       val sid = createSession
-      Ok ~> SetCookies(Cookie("sid", sid)) ~>Html5 { Nekopic.scalate.layoutAsNodes("/templates/index.jade") }
+      Ok ~> SetCookies(Cookie("sid", sid)) ~> Scalate("index.jade")
     }
     case GET(Path("/oauth/connect")) => Redirect(Instagram.authorizeUrl(CALLBACK_URL))
     case req @ GET(Path("/oauth/callback")) & Params(InstagramAuthSuccess(code)) & Cookies(cs) => {
@@ -39,7 +40,7 @@ class Nekopic extends Plan with ThreadPool with ServerErrorResponse {
       val client = new Instagram.Client(token)
       val resp = client.users_self_feed
 
-      ResponseString(resp.toString)
+      Ok ~> Scalate("feed.jade", "feed"->resp)
     }
   }
 }
