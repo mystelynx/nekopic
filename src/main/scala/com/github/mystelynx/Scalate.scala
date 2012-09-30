@@ -10,9 +10,9 @@ import unfiltered.response.{Html5, ComposeResponse}
  * To change this template use File | Settings | File Templates.
  */
 case class Scalate(uri: String, attributes: (String, Any)*) extends
-  ComposeResponse(Html5 { Scalate.engine.layoutAsNodes("/templates/%s" format uri, attributes.toMap) })
+  ComposeResponse(Html5 { ScalateTemplate.engine.layoutAsNodes("/templates/%s" format uri, attributes.toMap) })
 
-object Scalate {
+object ScalateTemplate {
   import org.fusesource.scalate._
   val engine = new TemplateEngine
 }
