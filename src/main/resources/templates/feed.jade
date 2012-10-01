@@ -49,7 +49,7 @@ html
                             img(src={data.images.standard_resolution.url})
                         section
                             h2 comments(#{data.comments.count})
-                            -for (comment <- data.comments)
+                            -for (comment <- data.comments.data)
                                 p
                                     | written by
                                     img(src={comment.from.profile_picture})
@@ -58,8 +58,8 @@ html
                                     | #{comment.text}
                         section
                             h2 likes(#{data.likes.count})
-                            -for (from <- data.likes.data)
-                                img(src={from.profile_picture} alt={"#"+from.id+"/"+from.username})
+                            -for (like <- data.likes.data)
+                                img(src={like.profile_picture} alt={"#"+like.id+"/"+from.username})
                         section
                             h2 caption
                             p #{data.caption.text}
