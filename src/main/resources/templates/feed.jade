@@ -59,7 +59,7 @@ html
                         section
                             h2 likes(#{data.likes.count})
                             -for (like <- data.likes.data)
-                                img(src={like.profile_picture} alt={"#"+like.id+"/"+from.username})
+                                img(src={like.profile_picture} alt={"#"+like.id+"/"+like.username})
                         section
                             h2 caption
                             p #{data.caption.text}
