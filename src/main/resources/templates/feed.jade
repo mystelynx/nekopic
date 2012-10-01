@@ -28,7 +28,7 @@ html
 
         .header-container
             header.wrapper.clearfix
-                h1.title h1.title
+                h1.title Instagram Self Feed
                 nav
                     ul
                         li
@@ -40,23 +40,36 @@ html
 
         .main-container
             .main.wrapper.clearfix
-                article
-                    header
-                        h1 article header h1
-                        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec.
-                    section
-                        h2 article section h2
-                        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor. Etiam ullamcorper lorem dapibus velit suscipit ultrices. Proin in est sed erat facilisis pharetra.
-                    section
-                        h2 article section h2
-                        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor. Etiam ullamcorper lorem dapibus velit suscipit ultrices. Proin in est sed erat facilisis pharetra.
-                    footer
-                        h3 article footer h3
-                        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor.
+                -for (data in feed.data)
+                    article
+                        header
+                            h1
+                                img(src={data.user.profile_picture})
+                                a(href={data.link}) [#{data.user.id}]&nbsp;#{data.user.username}
+                            img(src={data.images.standard_resolution.url})
+                        section
+                            h2 comments(#{data.comments.count})
+                            -for (comment in data.comments)
+                                p
+                                    | written by
+                                    img(src={comment.from.profile_picture})
+                                    | #{comment.from.username} #{comment.created_time}
+                                    br
+                                    | #{comment.text}
+                        section
+                            h2 likes(#{data.likes.count})
+                            -for (from in data.likes.data)
+                                img(src={from.profile_picture} alt={"#"+from.id+"/"+from.username})
+                        section
+                            h2 caption
+                            p #{data.caption.text}
+                        footer
+                            h3 tags
+                            p #{data.tags.mkString(" ")}
 
                 aside
-                    h3 aside
-                    p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor. Etiam ullamcorper lorem dapibus velit suscipit ultrices.
+                    h3 summary
+                    p now under construction
 
         .footer-container
             footer.wrapper
