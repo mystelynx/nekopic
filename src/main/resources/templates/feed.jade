@@ -44,28 +44,29 @@ html
                     article
                         header
                             h1
-                                img(src={data.user.profile_picture})
+                                img(src={data.user.profile_picture} width=32 height=32)
                                 a(href={data.link}) [#{data.user.id}]&nbsp;#{data.user.username}
-                            img(src={data.images.standard_resolution.url})
+                            img(src={data.images.standard_resolution.url} width=480 height=480)
                         section
                             h2 comments(#{data.comments.count})
                             -for (comment <- data.comments.data)
                                 p
-                                    | written by
-                                    img(src={comment.from.profile_picture})
+                                    img(src={comment.from.profile_picture} width=32 height=32)
                                     | #{comment.from.username} #{comment.created_time}
-                                    br
                                     | #{comment.text}
                         section
                             h2 likes(#{data.likes.count})
                             -for (like <- data.likes.data)
-                                img(src={like.profile_picture} alt={"#"+like.id+"/"+like.username})
+                                img(src={like.profile_picture} width=32 height=32 alt={"#"+like.id+"/"+like.username})
                         section
                             h2 caption
                             p #{data.caption.text}
                         -#footer
                             h3 tags
-                            p #{data.tags.mkString(" ")}
+                            -if (data.tags == null)
+                                p no tags
+                            -else
+                                p #{data.tags.mkString(" ")}
 
                 aside
                     h3 summary
