@@ -40,7 +40,7 @@ html
 
         .main-container
             .main.wrapper.clearfix
-                -for (data in feed.data)
+                -for (data <- feed.data)
                     article
                         header
                             h1
@@ -49,7 +49,7 @@ html
                             img(src={data.images.standard_resolution.url})
                         section
                             h2 comments(#{data.comments.count})
-                            -for (comment in data.comments)
+                            -for (comment <- data.comments)
                                 p
                                     | written by
                                     img(src={comment.from.profile_picture})
@@ -58,7 +58,7 @@ html
                                     | #{comment.text}
                         section
                             h2 likes(#{data.likes.count})
-                            -for (from in data.likes.data)
+                            -for (from <- data.likes.data)
                                 img(src={from.profile_picture} alt={"#"+from.id+"/"+from.username})
                         section
                             h2 caption
