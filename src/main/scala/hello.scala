@@ -5,7 +5,7 @@ import org.clapper.avsl.Logger
 import util.Properties
 import unfiltered.netty.{ServerErrorResponse, cycle}
 
-class Hello extends unfiltered.filter.Plan {
+class Hello extends cycle.Plan with ServerErrorResponse with cycle.ThreadPool {
   val logger = Logger(classOf[App])
 
   val CLIENT_ID = "bd8b8f655d1547f396c9ed5a6fe9b795"
@@ -66,7 +66,7 @@ object InstagramAuthFailure extends Params.Extract("error", Params.first ~> Para
 object Web extends App {
   val port = Properties.envOrElse("PORT", "8080").toInt
   println("Starting on port:%d" format port)
-  unfiltered.netty.Http(port).plan(new com.github.mystelynx.Nekopic).run()
+  unfiltered.netty.Http(port).plan(new Hello).run()
 //  unfiltered.jetty.Http.anylocal.plan(new Hello).run { s =>
 //    unfiltered.util.Browser.open( "http://127.0.0.1:%d/hello".format(s.port))
 //  }
