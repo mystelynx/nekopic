@@ -16,7 +16,7 @@ import sun.misc.OSEnvironment
  * Time: 22:01
  * To change this template use File | Settings | File Templates.
  */
-class Nekopic extends Plan with ThreadPool with ServerErrorResponse {
+class Nekopic extends unfiltered.filter.Plan {
   val CALLBACK_URL = "http://nekopic.herokuapp.com/oauth/callback"
   val log = Logger(classOf[Nekopic])
 

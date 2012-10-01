@@ -5,7 +5,7 @@ import org.clapper.avsl.Logger
 import util.Properties
 import unfiltered.netty.{ServerErrorResponse, cycle}
 
-class Hello extends cycle.Plan with cycle.ThreadPool with ServerErrorResponse {
+class Hello extends unfiltered.filter.Plan {
   val logger = Logger(classOf[App])
 
   val CLIENT_ID = "bd8b8f655d1547f396c9ed5a6fe9b795"
